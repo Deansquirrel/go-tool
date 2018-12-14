@@ -5,16 +5,23 @@ import (
 	"fmt"
 	"github.com/satori/go.uuid"
 	"math/rand"
+	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 )
 
 //引用的相关工程
-// github.com/drone/routes
 // github.com/BurntSushi/toml
+// github.com/drone/routes
 // github.com/garyburd/redigo
+// github.com/kardianos/service
+// github.com/kataras/golog
+// github.com/kataras/iris
+// github.com/kataras/pio
 // github.com/satori/go.uuid
+
 
 //生成随机数
 func RandInt(min int, max int) int {
@@ -57,4 +64,10 @@ func Md5(s string) string {
 	has := md5.Sum(data)
 	md5Str := fmt.Sprintf("%X", has)
 	return md5Str
+}
+
+//获取当前路径,不含文件名
+func GetCurrPath() (path string, err error){
+	path,err = filepath.Abs(filepath.Dir(os.Args[0]))
+	return
 }
