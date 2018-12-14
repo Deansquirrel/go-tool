@@ -11,10 +11,10 @@ import (
 )
 
 //引用的相关工程
-// github.com\drone\routes
-// github.com\BurntSushi\toml
-// github.com\garyburd\redigo
-// github.com\satori\go.uuid
+// github.com/drone/routes
+// github.com/BurntSushi/toml
+// github.com/garyburd/redigo
+// github.com/satori/go.uuid
 
 //生成随机数
 func RandInt(min int, max int) int {
