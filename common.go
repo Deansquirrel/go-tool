@@ -23,6 +23,7 @@ import (
 // github.com/satori/go.uuid
 // github.com/denisenkom/go-mssqldb
 // cloud.google.com/go/civil
+// github.com/alexbrainman/odbc
 
 //生成随机数
 func RandInt(min int, max int) int {

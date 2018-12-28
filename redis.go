@@ -65,6 +65,12 @@ func (myRedis *MyRedis)Get(db string,key string) (result string,err error){
 		pool = myRedis.newPool()
 	}
 	conn := pool.Get()
+	//defer func(){
+	//	err = conn.Close()
+	//	if err != nil {
+	//		global.MyLog(err.Error())
+	//	}
+	//}()
 	defer conn.Close()
 	_,err = conn.Do("SELECT",db)
 	if err != nil {
