@@ -69,18 +69,32 @@ func Md5(s string) string {
 }
 
 //获取当前路径,不含文件名
-func GetCurrPath() (path string, err error){
-	path,err = filepath.Abs(filepath.Dir(os.Args[0]))
+func GetCurrPath() (path string, err error) {
+	path, err = filepath.Abs(filepath.Dir(os.Args[0]))
 	return
 }
 
-func PathExists(path string) (bool,error){
-	_,err:=os.Stat(path)
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
 	if err == nil {
-		return true,nil
+		return true, nil
 	}
 	if os.IsNotExist(err) {
-		return false,nil
+		return false, nil
 	}
-	return false,nil
+	return false, nil
+}
+
+func CheckAndCreateFolder(path string) error {
+	b, err := PathExists(path)
+	if err != nil {
+		return err
+	}
+	if !b {
+		err = os.Mkdir(path, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
