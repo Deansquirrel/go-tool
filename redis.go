@@ -1,34 +1,56 @@
 package go_tool
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"time"
 )
 
 type MyRedis struct {
-	Server      string
-	Auth        string
-	MaxIdle     int
-	MaxActive   int
-	IdleTimeout int
+	server      string
+	auth        string
+	maxIdle     int
+	maxActive   int
+	idleTimeout int
 }
 
 var pool *redis.Pool
+
+func NewRedis(server string,auth string,maxIdle int,maxActive int,idleTimeout int) *MyRedis{
+	redis := &MyRedis{
+		server:server,
+		auth:auth,
+		maxIdle:maxIdle,
+		maxActive:maxActive,
+		idleTimeout:idleTimeout,
+	}
+	redis.newPool()
+	return redis
+}
+
+
+func (myRedis *MyRedis)GetConfigJson()(string,error){
+	configStr,err := json.Marshal(myRedis)
+	if err != nil {
+		return "",err
+	}
+	return string(configStr),nil
+}
 
 //创建连接池
 func (myRedis *MyRedis) newPool() *redis.Pool {
 
 	return &redis.Pool{
-		MaxIdle:     myRedis.MaxIdle,
-		MaxActive:   myRedis.MaxActive,
-		IdleTimeout: time.Duration(1000 * 1000 * 1000 * myRedis.IdleTimeout),
+		MaxIdle:     myRedis.maxIdle,
+		MaxActive:   myRedis.maxActive,
+		IdleTimeout: time.Duration(1000 * 1000 * 1000 * myRedis.idleTimeout),
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", myRedis.Server)
+			c, err := redis.Dial("tcp", myRedis.server)
 			if err != nil {
 				return nil, err
 			}
-			_, err = c.Do("auth", myRedis.Auth)
+			_, err = c.Do("auth", myRedis.auth)
 			if err != nil {
 				errLs := c.Close()
 				if errLs != nil {
